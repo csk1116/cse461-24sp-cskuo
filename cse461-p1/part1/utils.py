@@ -12,10 +12,12 @@ def create_udp_socket():
 def send_udp_message(sock, host, port, message, psecret=0, step=1, student_no=490):
     print(f"Sending message to {host}:{port}")
     if isinstance(message, str):
+        # Assume message is a string
         payload = message.encode('utf-8')
         payload += b'\0'  # Adding string terminator as per the protocol
     else:
-        payload = message
+        # Assume message is a list of integers
+        payload = struct.pack('>' + 'I' * len(message), *message)
 
     # Padding to align to 4-byte boundary
     while len(payload) % 4 != 0:
@@ -45,7 +47,7 @@ def create_packet(packet_id, length):
 # Utility functions for decoding packets
 def decode_packet(data):
     payload_len, psecret, step, student_no = struct.unpack(HEADER_FORMAT, data[:12])
-    payload = data[12:12+payload_len]
-    print(payload_len, psecret, step, student_no,) 
+    payload = data[12:]
+    print(payload_len, psecret, step, student_no) 
     print(payload)
         

@@ -6,14 +6,10 @@
 import sys
 import socket
 import struct
-
-
-SERVER_HOST1 = "attu2.cs.washington.edu"
-SERVER_HOST2 = "attu3.cs.washington.edu"
-SERVER_PORT = 41201
-
-STEP = 1
-STUDENT_ID = 860
+from stage_a import stage_a
+from stage_b import stage_b
+from config import *
+from utils import *
 
 def main():
     if len(sys.argv) != 3:
@@ -22,6 +18,15 @@ def main():
 
     server_name = sys.argv[1]
     port = int(sys.argv[2])
+
+    # Stage A
+    num, length, udp_port, secretA = stage_a(server_name, port)
+    print(f"Stage A: num={num}, len={length}, udp_port={udp_port}, secretA={secretA}")
+
+    # Stage B
+    tcp_port, secretB = stage_b(server_name, udp_port, num, length)
+    print(f"Stage B: tcp_port={tcp_port}, secretB={secretB}")
+
 
 if __name__ == "__main__":
     main()
