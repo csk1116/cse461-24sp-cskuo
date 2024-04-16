@@ -15,21 +15,6 @@ SERVER_PORT = 41201
 STEP = 1
 STUDENT_ID = 860
 
-def build_header():
-    pass
-
-def stage_a():
-    pass
-
-def stage_b():
-    pass
-
-def stage_c():
-    pass
-
-def stage_d():
-    pass
-
 def main():
     if len(sys.argv) != 3:
         print("Usage: ./run_client.sh <server name> <port>")
@@ -37,11 +22,6 @@ def main():
 
     server_name = sys.argv[1]
     port = int(sys.argv[2])
-
-    stage_a()
-    stage_b()
-    stage_c()
-    stage_d()
 
 if __name__ == "__main__":
     main()
