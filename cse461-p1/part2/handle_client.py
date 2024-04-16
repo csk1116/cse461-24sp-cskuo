@@ -4,7 +4,6 @@ import socket
 import time
 
 # Define protocol-specific constants
-HEADER_SIZE = 4
 TIMEOUT = 3
 HEADER_SIZE = 12
 
