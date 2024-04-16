@@ -24,11 +24,11 @@ def start_server():
         try:
             while True:
                 # Receive UDP packet for stage_a
-                message, client_address = server_socket.recvfrom(1024)
+                message, client_address = server_socket.recvfrom(1024)  # This function won't create a new client socket, since it's a UDP connection
                 print(f"[*] Received stage a packet from {client_address[0]}:{client_address[1]}")
                 
                 # Create a new thread to handle the client
-                client_thread = threading.Thread(target=handle_client, args=(message, client_address))
+                client_thread = threading.Thread(target=handle_client, args=(message, client_address, server_socket))
                 client_thread.start()
         except KeyboardInterrupt:
             print("\n[*] Server shutting down...")
