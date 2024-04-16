@@ -60,4 +60,10 @@ def handle_client(message, client_ip):
 
     # Stage B
     print("Stage B start")
+
     
+    
+    print("Stage B done!")
+
+    # Stage C
+    print("Stage C start")
