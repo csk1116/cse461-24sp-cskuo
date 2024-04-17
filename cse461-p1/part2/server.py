@@ -28,7 +28,7 @@ def start_server():
                 print(f"[*] Received stage a packet from {client_address[0]}:{client_address[1]}")
                 
                 # Create a new thread to handle the client
-                client_thread = threading.Thread(target=handle_client, args=(message, client_address, server_socket))
+                client_thread = threading.Thread(target=handle_client, args=(message, client_address))
                 client_thread.start()
         except KeyboardInterrupt:
             print("\n[*] Server shutting down...")
