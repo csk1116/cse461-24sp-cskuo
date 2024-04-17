@@ -1,6 +1,6 @@
 # Lab 1 Part 1
 ## Members
-* Wayne Huang tzuwei37
+* Wayne Huang, NetId: tzuwei37
 
 ## Secret Sequences
 * Secret A:
