@@ -13,9 +13,7 @@ def create_udp_socket():
 # host: the host to send the message to
 # port: the port to send the message to
 # message: the message to send
-def send_udp_message(sock, host, port, message, psecret=0, step=1, student_no=490):
-    print(f"Sending message to {host}:{port}")
-
+def send_udp_message(sock, host, port, message, psecret, step=1, student_no=490):
     if isinstance(message, str):
         # Assume message is a string
         payload = message.encode('utf-8')
@@ -23,13 +21,15 @@ def send_udp_message(sock, host, port, message, psecret=0, step=1, student_no=49
     else:
         # Assume message is a list of byte integers
         payload = message
-        
-
+    
     header = struct.pack(HEADER_FORMAT, len(payload), psecret, step, student_no)
     packet = header + payload
+    
+    ## Pad the packet to a multiple of 4 bytes
     while len(packet) % 4 != 0:
         packet += b'\0'
-    decode_packet(packet) # decode packet for debugging, remove this line in production
+
+    #decode_packet(packet) # decode packet for debugging, remove this line in production
     sock.sendto(packet, (host, port))
 
 def receive_udp_message(sock):

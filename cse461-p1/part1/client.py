@@ -24,7 +24,7 @@ def main():
     print(f"Stage A: num={num}, len={length}, udp_port={udp_port}, secretA={secretA}")
 
     # Stage B
-    tcp_port, secretB = stage_b(server_name, udp_port, num, length)
+    tcp_port, secretB = stage_b(server_name, udp_port, num, length, secretA)
     print(f"Stage B: tcp_port={tcp_port}, secretB={secretB}")
 
 
