@@ -6,10 +6,8 @@ import time
 import string
 
 # Define protocol-specific constants
-TIMEOUT = 3.0
+TIMEOUT = 5.0
 HEADER_SIZE = 12
-SERVER_HOST = '127.0.0.1'
-SERVER_PORT = 1337  # Random port
 BUFFER_LEN = 1024
 SERVER_STEP = 2
 
@@ -61,18 +59,24 @@ def handle_client(message, client_ip):
     response = pack('>iihhiiii', 16, psecret, SERVER_STEP, sid, num, ln, udp_port, secretA)
 
     # Send response
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.settimeout(TIMEOUT)
+    sender_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sender_sock.settimeout(TIMEOUT)
+
     try:
-        sock.sendto(response, client_ip)
+        sender_sock.sendto(response, client_ip)
         print("Stage A response sent.")
-    except socket.timeout:
+    except sender_sock.timeout:
         print("Timeout while sending response. Closing connection.")
     finally:
-        sock.close()
+        sender_sock.close()
     print("Stage A done!")
 
     # Stage B
+    # Create server socket, waiting for request
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind(('', udp_port))
+    sock.settimeout(TIMEOUT)
+
     print("Stage B start")
     payload_of_length_len = ln + 4
     while (payload_of_length_len % 4 != 0):
@@ -80,10 +84,6 @@ def handle_client(message, client_ip):
 
     expected_message_len = HEADER_SIZE + payload_of_length_len
     num_received = 0
-
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # TODO: create socket before sending the response or after? 
-    sock.bind(('', udp_port))
-    sock.settimeout(TIMEOUT)
 
     try:
         while num_received < num:
@@ -95,9 +95,9 @@ def handle_client(message, client_ip):
             if psecret != secretA:
                 print("Secret verification failed. Closing connection.")
                 return
-            # if payload_len != ln + 4 or len(payload) != ln:    # TODO: Test failed -> discuss reasons
-            #     print("Payload length verification failed. Closing connection.")
-            #     return
+            if payload_len != ln + 4:
+                print("Payload length verification failed. Closing connection.")
+                return
             if len(message) != expected_message_len:
                 print("Packet length verification failed. Closing connection.")
                 return
@@ -116,6 +116,7 @@ def handle_client(message, client_ip):
                 sock.sendto(response, client_address)
                 num_received += 1
     
+        # check if that port can be used first!!!
         # Send TCP port number and secretB
         tcp_port = random.randint(10000, 20000)
         secretB = random.randint(1, 1024)
@@ -173,7 +174,7 @@ def handle_client(message, client_ip):
                     return
             # validate padding
             for byte in payload[length2:]:
-                if byte != ord(b'\0'):
+                if byte != 0:
                     print("Padding validation failed in Stage D.")
                     return
                 

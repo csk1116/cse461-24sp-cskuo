@@ -5,8 +5,6 @@ import threading
 from handle_client import handle_client
 
 # Define constants for the server
-SERVER_HOST = '127.0.0.1'
-SERVER_PORT = 1337  # Random port
 BUFFER_LEN = 1024
 
 
