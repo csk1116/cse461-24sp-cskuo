@@ -69,7 +69,7 @@ def handle_client(message, client_ip):
     expected_message_len = HEADER_SIZE + payload_of_length_len
     num_received = 0
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # create socket before sending the response or after? 
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # TODO: create socket before sending the response or after? 
     sock.bind((SERVER_HOST, udp_port))
     sock.settimeout(TIMEOUT)
 
@@ -83,7 +83,7 @@ def handle_client(message, client_ip):
             if psecret != secretA:
                 print("Secret verification failed. Closing connection.")
                 return
-            # if payload_len != ln + 4 or len(payload) != ln:    # TODO: Test failed -> discuss
+            # if payload_len != ln + 4 or len(payload) != ln:    # TODO: Test failed -> discuss reasons
             #     print("Payload length verification failed. Closing connection.")
             #     return
             if len(message) != expected_message_len:
@@ -107,7 +107,7 @@ def handle_client(message, client_ip):
         tcp_port = random.randint(10000, 20000)
         secretB = random.randint(1, 1024)
         response = pack('>iihhii', 8, psecret, SERVER_STEP, sid, tcp_port, secretB)
-        sock.sendto(response, client_ip)
+        sock.sendto(response, client_ip)  # TODO: need verification of correctness
         print("Stage B response sent.")
     except socket.timeout:
         print("Timeout while waiting for packets.")
