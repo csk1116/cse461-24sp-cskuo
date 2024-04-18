@@ -4,13 +4,8 @@
 * Vincent Wang, NetID: whwen528
 * Eric Kuo, NetID: cskuo
 
-## Secret Sequences
-* Secret A:
-* Secret B:
-* Secret C:
-* Secret D:
-
 ## Usage
 ```
-python3 server.py
+bash run_server.sh <host> <port>
+e.g: bash run_server.sh attu2.cs.washington.edu 4610
 ```

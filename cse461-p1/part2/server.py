@@ -1,3 +1,4 @@
+import sys
 import socket
 import threading
 
@@ -11,16 +12,20 @@ BUFFER_LEN = 1024
 
 # Function to start the server
 def start_server():
+    server_name = sys.argv[1]
+    port = int(sys.argv[2])
+
     print("start server...")
     # Create a UDP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
     try:
         # Bind the socket to the host and port
-        server_socket.bind((SERVER_HOST, SERVER_PORT))
+        # server_socket.bind((SERVER_HOST, SERVER_PORT))
+        server_socket.bind((server_name, port))
         
         # Listen for incoming connections
-        print(f"[*] Listening on {SERVER_HOST}:{SERVER_PORT}")
+        print(f"[*] Listening on {server_name}:{port}")
         
         try:
             while True:
