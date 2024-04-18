@@ -2,13 +2,13 @@
 ## Members
 * Wayne Huang, NetId: tzuwei37
 * Vincent Wang, NetID: whwen528
-* Eric Kuo, NetID: 
+* Eric Kuo, NetID: cskuo
 
 ## Secret Sequences
-* Secret A:
-* Secret B:
-* Secret C:
-* Secret D:
+* Secret A: 63
+* Secret B: 28
+* Secret C: 252
+* Secret D: 320
 
 ## Usage
 ```

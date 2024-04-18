@@ -2,7 +2,7 @@
 ## Members
 * Wayne Huang, NetId: tzuwei37
 * Vincent Wang, NetID: whwen528
-* Eric Kuo, NetID: 
+* Eric Kuo, NetID: cskuo
 
 ## Secret Sequences
 * Secret A:

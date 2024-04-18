@@ -1,5 +1,6 @@
 import socket
 import struct
+import math
 from config import *
 
 
@@ -8,12 +9,15 @@ from config import *
 def create_udp_socket():
     return socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+def create_tcp_socket():
+    return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 # Wrap the payload with the header and send the message
 # sock: the socket to send the message
 # host: the host to send the message to
 # port: the port to send the message to
 # message: the message to send
-def send_udp_message(sock, host, port, message, psecret, step=1, student_no=490):
+def send_udp_message(sock, host, port, message, psecret, step=1, student_no=860):
     if isinstance(message, str):
         # Assume message is a string
         payload = message.encode('utf-8')
@@ -32,11 +36,20 @@ def send_udp_message(sock, host, port, message, psecret, step=1, student_no=490)
     #decode_packet(packet) # decode packet for debugging, remove this line in production
     sock.sendto(packet, (host, port))
 
+def send_tcp_packet(sock, packet):
+    sock.send(packet)
+
+def receive_tcp_message(sock):
+    return sock.recv(BUFFER_SIZE)
+
 def receive_udp_message(sock):
     data, _ = sock.recvfrom(BUFFER_SIZE)
     return data
 
 def parse_udp_response(data, response_format):
+    return struct.unpack(response_format, data)
+
+def parse_tcp_response(data, response_format):
     return struct.unpack(response_format, data)
 
 # function to create a packet for stage b
@@ -56,11 +69,21 @@ def create_packet(packet_id, length):
     return packet
 
 
+def create_stage_d_packet(header, char_c, length):
+    payload = struct.pack('c', char_c) * length
+    while len(payload) % 4:
+        payload += b'\0'
+    return header + payload
+
+def generate_header(payload_len, psecret, step=STEP, student_id=STUDENT_ID):
+    return struct.pack(HEADER_FORMAT, payload_len, psecret, step, student_id)
+
+
 # =================================================================================================
 # Utility functions for decoding packets
 def decode_packet(data):
     payload_len, psecret, step, student_no = struct.unpack(HEADER_FORMAT, data[:12])
     payload = data[12:]
-    print(payload_len, psecret, step, student_no) 
+    print(payload_len, psecret, step, student_no)
     print(payload)
-        
+

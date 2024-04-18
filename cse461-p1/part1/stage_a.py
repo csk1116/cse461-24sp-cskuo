@@ -5,6 +5,7 @@ import sys
 def stage_a(server_host, initial_udp_port):
     print("Stage A: Sending 'hello world' via UDP")
     with create_udp_socket() as sock:
+        sock.settimeout(5.0)
         # Step a1: Send "hello world"
         send_udp_message(sock, server_host, initial_udp_port, "hello world", psecret=0, step=1, student_no=STUDENT_ID)
         
