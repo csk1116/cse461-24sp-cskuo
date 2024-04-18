@@ -99,15 +99,16 @@ def handle_client(message, client_ip):
 
             # Send acknowledgment
             if random.random() < 0.95:  # 95% chance of sending an ack
+                print(f"Send ack_num = {num_received}")
                 response = pack('>iihhi', 4, psecret, SERVER_STEP, sid, num_received)
-                sock.sendto(response, client_ip)
+                sock.sendto(response, client_address)
                 num_received += 1
     
         # Send TCP port number and secretB
         tcp_port = random.randint(10000, 20000)
         secretB = random.randint(1, 1024)
         response = pack('>iihhii', 8, psecret, SERVER_STEP, sid, tcp_port, secretB)
-        sock.sendto(response, client_ip)  # TODO: need verification of correctness
+        sock.sendto(response, client_address)  # TODO: need verification of correctness
         print("Stage B response sent.")
     except socket.timeout:
         print("Timeout while waiting for packets.")
