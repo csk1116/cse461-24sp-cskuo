@@ -1,4 +1,4 @@
-# Lab 1 Part 1
+# Lab 1 Part 2
 ## Members
 * Wayne Huang, NetId: tzuwei37
 * Vincent Wang, NetID: whwen528
@@ -12,6 +12,5 @@
 
 ## Usage
 ```
-bash run_client.sh <host> <port>
-e.g: bash run_client.sh attu2.cs.washington.edu 41201
+python3 server.py
 ```
