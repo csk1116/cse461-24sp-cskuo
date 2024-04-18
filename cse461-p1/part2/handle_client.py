@@ -131,8 +131,6 @@ def handle_client(message, client_ip):
         sock.close()
         print("Stage B done!")
 
-    # Stage C
-    print("Stage C start")
 
     # tcp
     tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -164,7 +162,8 @@ def handle_client(message, client_ip):
             expected_len += 1
 
         for i in range(num2):
-            packet_d = stage_c_socket.recv(BUFFER_LEN)
+            packet_d = stage_c_socket.recv(expected_len)
+            # print(packet_d)
             # validate packet 
             if len(packet_d) != expected_len:
                 print("Packet validation failed in Stage D.")

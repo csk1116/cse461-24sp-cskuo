@@ -7,6 +7,7 @@ def stage_d(tcp_socket, num2, len2, secretC, char_c):
     packet = create_stage_d_packet(header, char_c, len2)
     # send num2 packet
     for i in range(num2):
+        # print(packet)
         send_tcp_packet(tcp_socket, packet)
         print(f"Packet {i} was sent.")
     # receive secretD
