@@ -6,6 +6,7 @@ from handle_client import handle_client
 # Define constants for the server
 SERVER_HOST = '127.0.0.1'
 SERVER_PORT = 1337  # Random port
+BUFFER_LEN = 1024
 
 
 # Function to start the server
@@ -24,7 +25,7 @@ def start_server():
         try:
             while True:
                 # Receive UDP packet for stage_a
-                message, client_address = server_socket.recvfrom(1024)  # This function won't create a new socket for client, since it's a UDP connection
+                message, client_address = server_socket.recvfrom(BUFFER_LEN)  # This function won't create a new socket for client, since it's a UDP connection
                 print(f"[*] Received stage a packet from {client_address[0]}:{client_address[1]}")
                 
                 # Create a new thread to handle the client
