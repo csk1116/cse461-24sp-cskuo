@@ -6,7 +6,7 @@ import time
 import string
 
 # Define protocol-specific constants
-TIMEOUT = 5.0
+TIMEOUT = 3.0
 HEADER_SIZE = 12
 BUFFER_LEN = 1024
 SERVER_STEP = 2
@@ -118,30 +118,36 @@ def handle_client(message, client_ip):
     
         # check if that port can be used first!!!
         # Send TCP port number and secretB
+        global tcp_port
         tcp_port = random.randint(10000, 20000)
         secretB = random.randint(1, 1024)
-        response = pack('>iihhii', 8, secretA, SERVER_STEP, sid, tcp_port, secretB)
-        sock.sendto(response, client_address)  # TODO: need verification of correctness
+        response = pack('>iihhii', 8, psecret, SERVER_STEP, sid, tcp_port, secretB)
+        sock.sendto(response, client_address)
         print("Stage B response sent.")
+    except socket.timeout:
+        print("Timeout while waiting for packets.")
+
+    finally:
+        sock.close()
         print("Stage B done!")
 
-        # tcp
-        tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        tcp_socket.settimeout(3.0)
-        tcp_socket.bind(('', tcp_port))
-        tcp_socket.listen(1)
-        stage_c_socket, addr_c = tcp_socket.accept()
+    # Stage C
+    print("Stage C start")
 
-        # Stage C
-        print("Stage C start")
+    # tcp
+    tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcp_socket.settimeout(3.0)
+    tcp_socket.bind(('', tcp_port))
+    tcp_socket.listen(1)
+    stage_c_socket, addr_c = tcp_socket.accept()
 
-        num2 = random.randint(1,20)
-        length2 = random.randint(1,20)
-        secret_c = random.randint(100,1000)
-        char_c = random.choice(string.ascii_letters).encode('ascii')
+    num2 = random.randint(1,20)
+    length2 = random.randint(1,20)
+    secret_c = random.randint(100,1000)
+    char_c = random.choice(string.ascii_letters).encode('ascii')
+    print(f"Stage C Sent: num2={num2}, len2={length2}, secretC={secret_c}, c={char_c}")
 
-        print(f"Stage C Sent: num2={num2}, len2={length2}, secretC={secret_c}, c={char_c}")
-
+    try:
         header = bytearray()
         header.extend(struct.pack('!IIHH', 13, secretB, SERVER_STEP, sid))
         packet = header + struct.pack('!IIIc', num2, length2, secret_c, char_c)
@@ -149,6 +155,7 @@ def handle_client(message, client_ip):
             packet += b'\0'
         
         stage_c_socket.send(packet)
+        print("Stage C done!")
 
         # Stage D
         print("Stage D start")
@@ -193,8 +200,6 @@ def handle_client(message, client_ip):
         print("Timeout while waiting for packets.")
 
     finally:
-        sock.close()
         tcp_socket.close()
         stage_c_socket.close()
-
-
+        print("Stage D done!")
