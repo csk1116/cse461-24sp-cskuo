@@ -1,0 +1,7 @@
+>>> CONNECT push.services.mozilla.com:443 HTTP/1.0
+>>> CONNECT www.google.com:443 HTTP/1.0
+>>> CONNECT push.services.mozilla.com:443 HTTP/1.0
+>>> CONNECT adservice.google.com:443 HTTP/1.0
+>>> CONNECT googleads.g.doubleclick.net:443 HTTP/1.0
+>>> CONNECT play.google.com:443 HTTP/1.0
+>>> CONNECT push.services.mozilla.com:443 HTTP/1.0
